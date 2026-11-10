@@ -1,10 +1,12 @@
+package src;
+
 class CelluleOrientee {
 
-    private Cellule case;  
+    private Cellule cellule;  
     private Cardinal direction; 
 
-    public CelluleOrientee(Cellule case, Cardinal direction) {
-        this.case = case;
+    public CelluleOrientee(Cellule cellule, Cardinal direction) {
+        this.cellule = new Cellule(cellule.getX(), cellule.getY());
         this.direction = direction;
     }
 }
