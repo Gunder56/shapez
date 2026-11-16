@@ -1,10 +1,15 @@
 package tests;
 
-class TestCelluleOrientee {
+public class TestCelluleOrientee {
     public static void main(String[] args) {
         Cellule cellule = new Cellule(0, 0);
-        Cardinal direction = Cardinal.NORD;
-        CelluleOrientee celluleOrientee = new CelluleOrientee(cellule, direction);
-        System.out.println("Cellule orientée créée avec succès.");
+        CelluleOriente cellule_orientee = new CelluleOriente(cellule, Cardinal.NORD);
+
+        if (cellule_orientee.getCellule() != cellule
+                || cellule_orientee.getDirection() != Cardinal.NORD) {
+            throw new AssertionError("Construction de la cellule orientée incorrecte");
+        }
+
+        System.out.println("Cellule orientée construite avec succès.");
     }
 }
