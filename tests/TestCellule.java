@@ -1,5 +1,11 @@
 package tests;
 
+import src.Cardinal;
+import src.Cellule;
+import src.CelluleOriente;
+import src.Forme;
+import src.Tapis;
+
 public class TestCellule {
     public static void main(String[] args) {
         Cellule cellule = new Cellule(0, 0);

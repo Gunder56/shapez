@@ -1,66 +1,67 @@
-package test;
+package tests;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import src.Cardinal;
+import src.Cellule;
+import src.CelluleOriente;
+import src.Forme;
+import src.Tapis;
 
-import model.Forme;
-import model.Convoyeur;
+public class TestConvoyeur {
+    public static void main(String[] args) {
+        Cellule cellule = new Cellule(0, 0);
+        Tapis tapis = new Tapis(cellule, Cardinal.EST, Cardinal.OUEST);
 
-public class ConvoyeurTest {
-
-   
-    @Test
-    void scenarioTest1_ConvoyeurVideAvecStockage() {
-       
-        Forme formeStockee = new Forme();
-        Convoyeur convoyeur = new Convoyeur();
-        convoyeur.setStockage(formeStockee); 
-
-        convoyeur.ajouterForme();
-
-        assertNotNull(convoyeur.getForme(), "L'attribut forme ne devrait pas être null");
-        assertEquals(formeStockee, convoyeur.getForme(), "La forme du convoyeur doit être celle qui était dans le stockage");
-
-        System.out.println("Scénario de test n°1 réalisé avec succès");
-    }
-
-   
-    @Test
-    void ajouterFormeTest() {
-        Forme forme = new Forme();
-        Convoyeur convoyeur = new Convoyeur();
-
-        convoyeur.ajouterForme(forme);
-
-        assertNotNull(convoyeur.getForme());
-        assertNull(convoyeur.getStockage());
-        System.out.println("test ajouterformeTest réalisé avec succès");
-    }
-
-    @Test
-    void stockeformeTest() {
-        Forme forme = new Forme();
-        Convoyeur convoyeur = new Convoyeur();
-
-        try {
-            convoyeur.stockerForme(forme);
-        } catch (Exception e) {
-            
+        if (!tapis.est_disponible()) {
+            throw new AssertionError("Un convoyeur vide doit être disponible");
         }
-        assertNotNull(convoyeur.getStockage());
-        System.out.println("test ajouterstockage réalisé avec succès");
 
-        try {
-            convoyeur.stockerForme();
-            assertNotNull(convoyeur.getStockage());
-        } catch (Exception e) {}
-        System.out.println("test n°2 sur stockerforme réalisé avec succès");
+        Forme forme = new Forme(1);
+        tapis.stocker_forme(forme);
 
-        try {
-            convoyeur.ajouterForme();
-            assertNotNull(convoyeur.getStockage());
-            assertNotNull(convoyeur.getForme());
-        } catch (Exception e) {}
-        System.out.println("test n°2bis sur stockerforme réalisé avec succès");
+        if (tapis.est_disponible()) {
+            throw new AssertionError("Un convoyeur avec du stockage ne doit pas être disponible");
+        }
+
+        tapis.ajouter_forme();
+
+        if (tapis.getForme() != forme
+                || tapis.getStockage() != null) {
+            throw new AssertionError("Chargement du convoyeur incorrect");
+        }
+
+        if (tapis.emplacement() != cellule) {
+            throw new AssertionError("emplacement() doit retourner la cellule du convoyeur");
+        }
+
+        tapis.extraire_forme();
+        if (tapis.getForme() != null
+                || !tapis.est_disponible()) {
+            throw new AssertionError("Extraction du convoyeur incorrecte");
+        }
+
+        Cellule celluleDestination = new Cellule(1, 0);
+        tapis.getSorties()[0] = new CelluleOriente(celluleDestination, Cardinal.EST);
+
+        if (tapis.destination() != null) {
+            throw new AssertionError("La destination sans machine doit être null");
+        }
+
+        Tapis destination = new Tapis(celluleDestination, Cardinal.OUEST, Cardinal.EST);
+        tapis.getSorties()[0] = new CelluleOriente(destination.emplacement(), Cardinal.EST);
+
+        if (tapis.destination() != destination) {
+            throw new AssertionError("destination() doit retourner la machine de la sortie");
+        }
+
+        tapis.stocker_forme(forme);
+        tapis.ajouter_forme();
+        tapis.deplacer_forme();
+
+        if (tapis.getForme() != null
+                || destination.getForme() != forme) {
+            throw new AssertionError("deplacer_forme() doit transférer la forme");
+        }
+
+        System.out.println("Convoyeur testé avec succès.");
     }
 }

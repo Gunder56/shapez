@@ -1,6 +1,6 @@
 package src;
 
-class CelluleOriente {
+public class CelluleOriente {
     private Cellule cellule;
     private Cardinal direction;
 

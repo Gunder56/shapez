@@ -16,7 +16,11 @@ Le projet contient actuellement les éléments suivants :
 - création d'un `Tapis` avec une entrée et une sortie orientées ;
 - stockage temporaire et déplacement de formes dans la hiérarchie des
   convoyeurs ;
-- tests de construction pour les formes, cellules, cellules orientées et tapis.
+- gestion des convoyeurs ajoutés à une `Grille` ;
+- mise à jour des transferts de formes et conservation du nombre de formes ;
+- tests unitaires de construction ;
+- tests des mouvements et de la disponibilité des convoyeurs ;
+- tests de la grille, des destinations et de la conservation des formes.
 
 ## Spécifications
 
@@ -31,7 +35,8 @@ Le modèle objet est organisé autour des classes suivantes :
   échéant, une machine ;
 - `CelluleOriente` : couple formé par une cellule et une direction ;
 - `Forme` : objet transporté par les convoyeurs ;
-- `Cardinal` : énumération des quatre directions possibles.
+- `Cardinal` : énumération des quatre directions possibles ;
+- `Grille` : ensemble des cellules et convoyeurs mis à jour ensemble.
 
 Un tapis ne peut être créé que sur une cellule libre. Sa création associe
 automatiquement le tapis à cette cellule. Une forme peut être stockée, chargée
@@ -48,13 +53,17 @@ shapez/
 │   ├── CelluleOriente.java
 │   ├── Convoyeur.java
 │   ├── Forme.java
+│   ├── Grille.java
 │   ├── Machine.java
 │   └── Tapis.java
 ├── tests/
 │   ├── TestCellule.java
 │   ├── TestCelluleOrientee.java
+│   ├── TestConvoyeur.java
 │   ├── TestForme.java
-│   └── TestTapis.java
+│   ├── TestFirstPart.java
+│   ├── TestTapis.java
+│   └── TestGrille.java
 ├── main.java
 ├── Partie 3.pdf
 ├── GUIDE_GIT_GITHUB.md
@@ -69,15 +78,14 @@ shapez/
 - Marc-Eloi de Besombes
 - Zyad Zougaghi Kassimi-Alaoui
 
-Dernière mise à jour du README : 17 novembre 2026.
+Dernière mise à jour du README : 18 novembre 2026.
 
 ## Guide d'utilisation
 
 ### Prérequis
 
 - Java Development Kit (JDK) ;
-- Visual Studio Code ;
-- extension **Extension Pack for Java** recommandée dans VS Code.
+- un IDE ;
 
 ### Ouverture du projet
 
@@ -88,28 +96,41 @@ et les tests exécutables dans `tests/`.
 
 Depuis le dossier `shapez`, la compilation peut être lancée avec :
 
-```powershell
-New-Item -ItemType Directory -Force out
-javac -d out src\*.java tests\*.java
+```bash
+mkdir -p out
+javac -d out src/*.java tests/*.java main.java
 ```
 
-La compilation complète doit être finalisée après l'ajout des accesseurs de
-forme utilisés par `Convoyeur` et la mise en cohérence des déclarations de
-packages des tests.
+### Exécution du programme principal
+
+```bash
+java -cp out src.main
+```
 
 ### Exécution des tests
 
-Après compilation, les tests peuvent être exécutés individuellement :
+Après compilation, les tests unitaires peuvent être exécutés individuellement :
 
-```powershell
+```bash
 java -cp out tests.TestForme
 java -cp out tests.TestCellule
 java -cp out tests.TestCelluleOrientee
 java -cp out tests.TestTapis
+java -cp out tests.TestConvoyeur
+java -cp out tests.TestGrille
 ```
 
-Chaque test affiche un message de réussite ou lève une `AssertionError` en cas
-de comportement incorrect.
+Les scénarios de la première partie du sujet sont exécutés avec :
+
+```bash
+java -cp out src.tests.TestFirstPart
+```
+
+Ce test couvre les scénarios de stockage, chargement, déplacement, destination,
+mise à jour et conservation des formes.
+
+Chaque test affiche un message de réussite ou lève une `AssertionError`
+en cas de comportement incorrect.
 
 ## Licence
 

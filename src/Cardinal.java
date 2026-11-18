@@ -1,5 +1,5 @@
 package src;
 
-enum Cardinal {
+public enum Cardinal {
     NORD, SUD, EST, OUEST;
 }

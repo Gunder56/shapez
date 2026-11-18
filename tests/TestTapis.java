@@ -1,5 +1,9 @@
 package tests;
 
+import src.Cardinal;
+import src.Cellule;
+import src.Tapis;
+
 public class TestTapis {
     public static void main(String[] args) {
         Cellule cellule = new Cellule(0, 0);

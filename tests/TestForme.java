@@ -1,5 +1,7 @@
 package tests;
 
+import src.Forme;
+
 public class TestForme {
     public static void main(String[] args) {
         Forme forme = new Forme(1);

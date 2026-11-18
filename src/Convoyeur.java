@@ -1,6 +1,6 @@
 package src;
 
-abstract class Convoyeur extends Machine {
+public abstract class Convoyeur extends Machine {
     private CelluleOriente[] entrees;
     private CelluleOriente[] sorties;
     private Forme forme;
@@ -12,7 +12,7 @@ abstract class Convoyeur extends Machine {
     }
 
     public boolean est_disponible() {
-        return stockage == null;
+        return forme == null && stockage == null;
     }
 
     public Machine destination() {
@@ -31,9 +31,10 @@ abstract class Convoyeur extends Machine {
             return;
         }
 
-        Cellule cellule_destination = sorties[0].getCellule();
-        if (cellule_destination.getForme() == null) {
-            cellule_destination.setForme(forme);
+        Machine destination = destination();
+        if (destination.est_disponible()) {
+            destination.stocker_forme(forme);
+            destination.ajouter_forme();
             forme = null;
         }
     }
@@ -57,6 +58,14 @@ abstract class Convoyeur extends Machine {
 
     public Cellule emplacement() {
         return entrees[0].getCellule();
+    }
+
+    public CelluleOriente[] getEntrees() {
+        return entrees;
+    }
+
+    public CelluleOriente[] getSorties() {
+        return sorties;
     }
 
     public Forme getForme() {

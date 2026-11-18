@@ -1,28 +1,34 @@
 package src;
 
 public class Tapis extends Convoyeur {
-    private CelluleOriente[] entrees;
-    private CelluleOriente[] sorties;
-
     public Tapis(Cellule cellule, Cardinal entree, Cardinal sortie) {
+        super(creerEntrees(cellule, entree), creerSorties(cellule, sortie));
         if (!cellule.est_libre()) {
             throw new IllegalArgumentException("La cellule doit être vide");
         }
 
-        entrees = new CelluleOriente[] {
-            new CelluleOriente(cellule, entree)
-        };
-        sorties = new CelluleOriente[] {
-            new CelluleOriente(cellule, sortie)
-        };
         cellule.setMachine(this);
     }
 
-    public CelluleOriente[] getEntrees() {
-        return entrees;
+    private static CelluleOriente[] creerEntrees(Cellule cellule, Cardinal entree) {
+        return new CelluleOriente[] { new CelluleOriente(cellule, entree) };
     }
 
-    public CelluleOriente[] getSorties() {
-        return sorties;
+    private static CelluleOriente[] creerSorties(Cellule cellule, Cardinal sortie) {
+        return new CelluleOriente[] { new CelluleOriente(cellule, sortie) };
+    }
+
+    @Override
+    public Machine destination() {
+        if (getSorties().length == 0
+                || getSorties()[0] == null
+                || getSorties()[0].getCellule() == null) {
+            return null;
+        }
+        Cellule destination = getSorties()[0].getCellule();
+        if (destination == emplacement()) {
+            return null;
+        }
+        return destination.getMachine();
     }
 }
